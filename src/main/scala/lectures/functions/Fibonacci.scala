@@ -39,12 +39,12 @@ object Fibonacci2 extends App {
     else fibsImpl(num, Array(1, 1, 2))(num-1)
 
   private def fibsImpl(num: Int, acc: Array[Int]): Array[Int] =
-    if (num==4) acc:+(acc(acc.length-2) + acc(acc.length-1))
+    if (num==4) acc:+(acc(1) + acc(2))
     else fibsImpl(num-1, acc:+(acc(acc.length-2) + acc(acc.length-1)))
 
-
+  println(fibsImpl(1, Array(1,1,2,3) ))
   println(fibs2(9))
-  println(fibs2(1000))
+//  println(fibs2(1000))
 }
 
 
