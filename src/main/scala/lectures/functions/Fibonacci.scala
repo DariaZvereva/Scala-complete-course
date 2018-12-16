@@ -1,5 +1,7 @@
 package lectures.functions
 
+import scala.annotation.tailrec
+
 /**
   * Цель упражнения: вычислить 9 - е число Фибоначчи
   * Для этого раскомментируйте строчку в методе fibs и исправьте ошибку компиляции.
@@ -34,17 +36,18 @@ object Fibonacci extends App {
   */
 object Fibonacci2 extends App {
 
-  def fibs2(num: Int) =
-    if (num <= 3) Array(1, 1, 2)(num - 1)
-    else fibsImpl(num, Array(1, 1, 2))(num-1)
+  def fibs2(num: Int) = {
 
-  private def fibsImpl(num: Int, acc: Array[Int]): Array[Int] =
-    if (num==4) acc:+(acc(1) + acc(2))
-    else fibsImpl(num-1, acc:+(acc(acc.length-2) + acc(acc.length-1)))
+    @tailrec
+    def fibsImpl(num: Int, acc: Array[Int]): Array[Int] =
+      if (num == 0) acc
+      else fibsImpl(num - 1, acc :+ (acc(acc.length - 2) + acc(acc.length - 1)))
 
-  println(fibsImpl(1, Array(1,1,2,3) ))
+    fibsImpl(num, Array(1, 1, 2))(num - 1)
+  }
+
   println(fibs2(9))
-//  println(fibs2(1000))
+  //  println(fibs2(1000))
 }
 
 

@@ -42,14 +42,16 @@ class SQLAPI(resource: String) {
     prm
   }
 
-  val connection = (resource: String) => Connection(resource)
+  val connection: String => Connection = (resource: String) => Connection(resource)
 
   def execute(sql: String): String = { // use resource from constructor
-    ((logParameter[String] _ andThen connection andThen openConnection) (resource) compose logParameter[String] andThen logParameter[String]) (sql)
+    (logParameter[String] _ andThen
+      (logParameter[String] _ andThen connection andThen openConnection) (resource)
+      andThen logParameter[String]) (sql)
   }
 
 
-  def openConnection(connection: Connection): (String) => String =
+  def openConnection(connection: Connection): String => String =
     (sql: String) => {
       connection.open execute sql
     }

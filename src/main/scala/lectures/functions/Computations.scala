@@ -10,7 +10,7 @@ package lectures.functions
   */
 trait Data {
   val filterData = "Клара у Карла украла корралы, Карл у Клары украл кларнет"
-  val dataArray = "Клара Цеткин обожала Карла Маркса".split(" ")
+  val dataArray: Array[String] = "Клара Цеткин обожала Карла Маркса".split(" ")
 }
 
 object Computation extends App with Data {
@@ -46,7 +46,7 @@ object CurriedComputation extends App with Data {
     dataProducer.filter(dataItem => filterArray.contains(dataItem))
   }
 
-  val partiallyAppliedCurriedFunction = curriedComputation(filterData)_
+  val partiallyAppliedCurriedFunction = curriedComputation(filterData) _
 
   val result = partiallyAppliedCurriedFunction(dataArray)
   result.foreach(println)
@@ -59,9 +59,9 @@ object CurriedComputation extends App with Data {
   */
 object FunctionalComputation extends App with Data {
 
-  def functionalComputation(filterData: String): (Array[String]) => Array[String] = {
+  def functionalComputation(filterData: String): Array[String] => Array[String] = {
     lazy val filterArray = filterData.split(" ")
-    (dataProducer: Array[String]) => dataProducer.filter(dataItem => filterArray.contains(dataItem))
+    dataProducer: Array[String] => dataProducer.filter(dataItem => filterArray.contains(dataItem))
   }
 
   val filterApplied = functionalComputation(filterData)
