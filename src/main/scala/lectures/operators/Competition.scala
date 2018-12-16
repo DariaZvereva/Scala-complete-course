@@ -1,7 +1,7 @@
 package lectures.operators
 
 /**
-  * Проходит чемпионат по спортивному киданю костей)
+  * Проходит чемпионат по спортивному киданию костей)
   * Сражаются "Наши" и "Приезжие"
   *
   * Каждый член команды бросил кубик и должен сравнить свой результат с каждым результатом из команды соперника
@@ -30,18 +30,28 @@ object Competition extends App {
   val locals = Map("Artem" -> 6, "Sergey" -> 5, "Anton" -> 2, "Vladimir" -> "2", "Alexander" -> 4D)
   val foreigners = Map[String, Int]("John" -> 3, "James" -> 1, "Tom" -> 2, "Dick" -> 5, "Eric" -> 6)
 
-  //  val results = for (l <- locals;
-  //                     ???) {
-  //    val localName = l._1
-  //    val localValue = l._2
-  //    ???
-  //  }
+  def convertToInt[T](a: T): Int =
+    a match {
+      case a: Int => a
+      case a: String => a.toInt
+      case a: Double => a.toInt
+    }
 
-  //  var finalResult = 0
-  //  for (r <- results) {
-  //    if (???) finalResult = finalResult + 1
-  //    else ???
-  //  }
+    val results = for (l <- locals;
+                       l2 <- foreigners) yield {
+      val localName = l._1
+      val localValue = convertToInt(l._2)
+      val foreignName = l2._1
+      val foreignValue = convertToInt(l2._2)
+      (localName + " vs " + foreignName, localValue - foreignValue)
+    }
 
-  print("Победила дружба")
+    var finalResult = 0
+    for (r <- results) {
+      if (r._2 > 0) finalResult = finalResult + 1
+      else if (r._2 < 0) finalResult = finalResult - 1
+    }
+  if (finalResult == 0) println("Победила дружба")
+  if (finalResult > 0) println("Наша взяла")
+  if (finalResult < 0) println("Продули")
 }
