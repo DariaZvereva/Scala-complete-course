@@ -12,33 +12,37 @@ import lectures.functions.SQLAPI
   * * * * уберите знаки вопроса и раскомментируйте execute(sql)
   * * * * допишите тело функций в соответсвии с комментарием в каждом методе
   * После этого допишите инициализацию usefulService в Application так, чтобы:
-  *   в тестовой среде использовался TestServiceImpl
-  *   в боевой - ProductionServiceImpl
+  * в тестовой среде использовался TestServiceImpl
+  * в боевой - ProductionServiceImpl
   *
   * Допишите тесты в ApplicationTest
   *
   */
 trait UsefulService {
+  this: SQLAPI =>
+
   def doSomeService(): Int
 }
 
-trait TestServiceImpl extends UsefulService {
+class TestServiceImpl(resource: String) extends SQLAPI(resource) with UsefulService {
   private val sql = "do the SQL query and then count words"
-  def doSomeService() = ??? //execute(sql) //подсчитайте количество слов в результате execute
+
+  def doSomeService(): Int = execute(sql).split(" ").length //подсчитайте количество слов в результате execute
 }
 
-trait ProductionServiceImpl extends UsefulService {
-  private val sql = "do the SQL query and than count 'a' sympols"
-  def doSomeService() = ??? //execute(sql) // подсчитайте сколько символов 'a' в полученной строке
+class ProductionServiceImpl(resourse: String) extends SQLAPI(resourse) with UsefulService {
+  private val sql = "do the SQL query and than count 'a' symbols"
+
+  def doSomeService(): Int = execute(sql).count(_ == 'a') // подсчитайте сколько символов 'a' в полученной строке
 }
 
 class Application(isTestEnv: Boolean) {
 
   val usefulService: UsefulService = if (isTestEnv)
-   ??? //передайте "test db Resource" в качестве ресурсв в конструктор SQLAPI
+    new TestServiceImpl("test db Resource")
   else
-   ??? //передайте "production Resource" в качестве ресурсв в конструктор SQLAPI
+    new ProductionServiceImpl("production Resource") //передайте "production Resource" в качестве ресурсв в конструктор SQLAPI
 
-  def doTheJob() = usefulService.doSomeService()
+  def doTheJob(): Int = usefulService.doSomeService()
 
 }
